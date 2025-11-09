@@ -186,16 +186,6 @@ Once the application is running:
   - macOS: `otool -L ./Notepad`
   - Windows: Use `windeployqt.exe`
 
-## Contributing
-
-Contributions are welcome! If you'd like to improve this project:
-
-1. Fork the repository
-2. Create a feature branch (`git checkout -b feature/amazing-feature`)
-3. Commit your changes (`git commit -m 'Add some amazing feature'`)
-4. Push to the branch (`git push origin feature/amazing-feature`)
-5. Open a Pull Request
-
 ## License
 
 This project is available under the MIT License. See the LICENSE file for more details.
