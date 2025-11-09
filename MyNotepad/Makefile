@@ -17,7 +17,7 @@ CXX           = /Library/Developer/CommandLineTools/usr/bin/clang++
 DEFINES       = -DQT_NO_DEBUG -DQT_PRINTSUPPORT_LIB -DQT_WIDGETS_LIB -DQT_GUI_LIB -DQT_CORE_LIB
 CFLAGS        = -pipe -O2 $(EXPORT_ARCH_ARGS) -isysroot /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk -mmacosx-version-min=10.13 -Wall -Wextra -fPIC $(DEFINES)
 CXXFLAGS      = -pipe -stdlib=libc++ -O2 $(EXPORT_ARCH_ARGS) -isysroot /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk -mmacosx-version-min=10.13 -Wall -Wextra -fPIC $(DEFINES)
-INCPATH       = -I. -I/opt/homebrew/Cellar/qt@5/5.15.17/lib/QtPrintSupport.framework/Headers -I/opt/homebrew/Cellar/qt@5/5.15.17/lib/QtWidgets.framework/Headers -I/opt/homebrew/Cellar/qt@5/5.15.17/lib/QtGui.framework/Headers -I/opt/homebrew/Cellar/qt@5/5.15.17/lib/QtCore.framework/Headers -I. -I/Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/System/Library/Frameworks/OpenGL.framework/Headers -I. -I/opt/homebrew/Cellar/qt@5/5.15.17/mkspecs/macx-clang -F/opt/homebrew/Cellar/qt@5/5.15.17/lib
+INCPATH       = -I. -I../FILE_MANAGER/include -I/opt/homebrew/opt/openssl@3/include -I/opt/homebrew/Cellar/qt@5/5.15.17/lib/QtPrintSupport.framework/Headers -I/opt/homebrew/Cellar/qt@5/5.15.17/lib/QtWidgets.framework/Headers -I/opt/homebrew/Cellar/qt@5/5.15.17/lib/QtGui.framework/Headers -I/opt/homebrew/Cellar/qt@5/5.15.17/lib/QtCore.framework/Headers -I. -I/Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/System/Library/Frameworks/OpenGL.framework/Headers -I. -I/opt/homebrew/Cellar/qt@5/5.15.17/mkspecs/macx-clang -F/opt/homebrew/Cellar/qt@5/5.15.17/lib
 QMAKE         = /opt/homebrew/opt/qt@5/bin/qmake
 DEL_FILE      = rm -f
 CHK_DIR_EXISTS= test -d
@@ -37,10 +37,10 @@ MOVE          = mv -f
 TAR           = tar -cf
 COMPRESS      = gzip -9f
 DISTNAME      = mynotepad1.0.0
-DISTDIR = /Users/ankit-s/Desktop/MyNotepad/.tmp/mynotepad1.0.0
+DISTDIR = /Users/ankit-s/Desktop/file_manager/MyNotepad/.tmp/mynotepad1.0.0
 LINK          = /Library/Developer/CommandLineTools/usr/bin/clang++
 LFLAGS        = -stdlib=libc++ -headerpad_max_install_names $(EXPORT_ARCH_ARGS) -isysroot /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk -mmacosx-version-min=10.13 -Wl,-rpath,@executable_path/../Frameworks
-LIBS          = $(SUBLIBS) -F/opt/homebrew/Cellar/qt@5/5.15.17/lib -framework QtPrintSupport -framework QtWidgets -framework QtGui -framework AppKit -framework Metal -framework QtCore -framework DiskArbitration -framework IOKit -framework OpenGL   
+LIBS          = $(SUBLIBS) -F/opt/homebrew/Cellar/qt@5/5.15.17/lib -L/opt/homebrew/opt/openssl@3/lib -lcrypto -framework QtPrintSupport -framework QtWidgets -framework QtGui -framework AppKit -framework Metal -framework QtCore -framework DiskArbitration -framework IOKit -framework OpenGL   
 AR            = /Library/Developer/CommandLineTools/usr/bin/ar cq
 RANLIB        = /Library/Developer/CommandLineTools/usr/bin/ranlib -s
 SED           = sed
@@ -53,10 +53,12 @@ OBJECTS_DIR   = ./
 ####### Files
 
 SOURCES       = main.cpp \
-		mynotepad.cpp qrc_mynotepad.cpp \
+		mynotepad.cpp \
+		../FILE_MANAGER/src/encryption.c qrc_mynotepad.cpp \
 		moc_mynotepad.cpp
 OBJECTS       = main.o \
 		mynotepad.o \
+		encryption.o \
 		qrc_mynotepad.o \
 		moc_mynotepad.o
 DIST          = /opt/homebrew/Cellar/qt@5/5.15.17/mkspecs/features/spec_pre.prf \
@@ -271,22 +273,24 @@ DIST          = /opt/homebrew/Cellar/qt@5/5.15.17/mkspecs/features/spec_pre.prf 
 		/opt/homebrew/Cellar/qt@5/5.15.17/mkspecs/features/exceptions.prf \
 		/opt/homebrew/Cellar/qt@5/5.15.17/mkspecs/features/yacc.prf \
 		/opt/homebrew/Cellar/qt@5/5.15.17/mkspecs/features/lex.prf \
-		notepad.pro mynotepad.h main.cpp \
-		mynotepad.cpp
+		notepad.pro mynotepad.h \
+		../FILE_MANAGER/include/encryption.h main.cpp \
+		mynotepad.cpp \
+		../FILE_MANAGER/src/encryption.c
 QMAKE_TARGET  = mynotepad
 DESTDIR       = 
 TARGET        = mynotepad.app/Contents/MacOS/mynotepad
 
 ####### Custom Variables
 EXPORT_QMAKE_MAC_SDK = macosx
-EXPORT_QMAKE_MAC_SDK_VERSION = 26.0
+EXPORT_QMAKE_MAC_SDK_VERSION = 26.1
 EXPORT_QMAKE_XCODE_DEVELOPER_PATH = /Library/Developer/CommandLineTools
-EXPORT__QMAKE_STASH_ = /Users/ankit-s/Desktop/MyNotepad/.qmake.stash
+EXPORT__QMAKE_STASH_ = /Users/ankit-s/Desktop/file_manager/MyNotepad/.qmake.stash
 EXPORT_VALID_ARCHS = arm64
 EXPORT_DEFAULT_ARCHS = arm64
 EXPORT_ARCHS = $(filter $(EXPORT_VALID_ARCHS), $(if $(ARCHS), $(ARCHS), $(if $(EXPORT_DEFAULT_ARCHS), $(EXPORT_DEFAULT_ARCHS), $(EXPORT_VALID_ARCHS))))
 EXPORT_ARCH_ARGS = $(foreach arch, $(if $(EXPORT_ARCHS), $(EXPORT_ARCHS), $(EXPORT_VALID_ARCHS)), -arch $(arch))
-EXPORT__PRO_FILE_ = /Users/ankit-s/Desktop/MyNotepad/notepad.pro
+EXPORT__PRO_FILE_ = /Users/ankit-s/Desktop/file_manager/MyNotepad/notepad.pro
 
 
 include /opt/homebrew/Cellar/qt@5/5.15.17/mkspecs/features/mac/sdk.mk
@@ -765,8 +769,8 @@ distdir: FORCE
 	$(COPY_FILE) --parents $(DIST) $(DISTDIR)/
 	$(COPY_FILE) --parents mynotepad.qrc $(DISTDIR)/
 	$(COPY_FILE) --parents /opt/homebrew/Cellar/qt@5/5.15.17/mkspecs/features/data/dummy.cpp $(DISTDIR)/
-	$(COPY_FILE) --parents mynotepad.h $(DISTDIR)/
-	$(COPY_FILE) --parents main.cpp mynotepad.cpp $(DISTDIR)/
+	$(COPY_FILE) --parents mynotepad.h ../FILE_MANAGER/include/encryption.h $(DISTDIR)/
+	$(COPY_FILE) --parents main.cpp mynotepad.cpp ../FILE_MANAGER/src/encryption.c $(DISTDIR)/
 	$(COPY_FILE) --parents mynotepad.ui $(DISTDIR)/
 
 
@@ -833,7 +837,7 @@ moc_mynotepad.cpp: mynotepad.h \
 		/opt/homebrew/Cellar/qt@5/5.15.17/lib/QtWidgets.framework/Headers/qmainwindow.h \
 		moc_predefs.h \
 		/opt/homebrew/Cellar/qt@5/5.15.17/bin/moc
-	/opt/homebrew/Cellar/qt@5/5.15.17/bin/moc $(DEFINES) --include /Users/ankit-s/Desktop/MyNotepad/moc_predefs.h -I/opt/homebrew/Cellar/qt@5/5.15.17/mkspecs/macx-clang -I/Users/ankit-s/Desktop/MyNotepad -I/opt/homebrew/Cellar/qt@5/5.15.17/lib/QtPrintSupport.framework/Headers -I/opt/homebrew/Cellar/qt@5/5.15.17/lib/QtWidgets.framework/Headers -I/opt/homebrew/Cellar/qt@5/5.15.17/lib/QtGui.framework/Headers -I/opt/homebrew/Cellar/qt@5/5.15.17/lib/QtCore.framework/Headers -I/Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/c++/v1 -I/Library/Developer/CommandLineTools/usr/lib/clang/17/include -I/Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include -I/Library/Developer/CommandLineTools/usr/include -F/opt/homebrew/Cellar/qt@5/5.15.17/lib mynotepad.h -o moc_mynotepad.cpp
+	/opt/homebrew/Cellar/qt@5/5.15.17/bin/moc $(DEFINES) --include /Users/ankit-s/Desktop/file_manager/MyNotepad/moc_predefs.h -I/opt/homebrew/Cellar/qt@5/5.15.17/mkspecs/macx-clang -I/Users/ankit-s/Desktop/file_manager/MyNotepad -I/Users/ankit-s/Desktop/file_manager/FILE_MANAGER/include -I/opt/homebrew/opt/openssl@3/include -I/opt/homebrew/Cellar/qt@5/5.15.17/lib/QtPrintSupport.framework/Headers -I/opt/homebrew/Cellar/qt@5/5.15.17/lib/QtWidgets.framework/Headers -I/opt/homebrew/Cellar/qt@5/5.15.17/lib/QtGui.framework/Headers -I/opt/homebrew/Cellar/qt@5/5.15.17/lib/QtCore.framework/Headers -I/Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/c++/v1 -I/Library/Developer/CommandLineTools/usr/lib/clang/17/include -I/Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include -I/Library/Developer/CommandLineTools/usr/include -F/opt/homebrew/Cellar/qt@5/5.15.17/lib mynotepad.h -o moc_mynotepad.cpp
 
 compiler_moc_objc_header_make_all:
 compiler_moc_objc_header_clean:
@@ -862,7 +866,13 @@ main.o: main.cpp mynotepad.h \
 		/opt/homebrew/Cellar/qt@5/5.15.17/lib/QtWidgets.framework/Headers/QMainWindow \
 		/opt/homebrew/Cellar/qt@5/5.15.17/lib/QtWidgets.framework/Headers/qmainwindow.h \
 		/opt/homebrew/Cellar/qt@5/5.15.17/lib/QtWidgets.framework/Headers/QApplication \
-		/opt/homebrew/Cellar/qt@5/5.15.17/lib/QtWidgets.framework/Headers/qapplication.h
+		/opt/homebrew/Cellar/qt@5/5.15.17/lib/QtWidgets.framework/Headers/qapplication.h \
+		/opt/homebrew/Cellar/qt@5/5.15.17/lib/QtCore.framework/Headers/QFile \
+		/opt/homebrew/Cellar/qt@5/5.15.17/lib/QtCore.framework/Headers/qfile.h \
+		/opt/homebrew/Cellar/qt@5/5.15.17/lib/QtCore.framework/Headers/QTextStream \
+		/opt/homebrew/Cellar/qt@5/5.15.17/lib/QtCore.framework/Headers/qtextstream.h \
+		/opt/homebrew/Cellar/qt@5/5.15.17/lib/QtCore.framework/Headers/QString \
+		/opt/homebrew/Cellar/qt@5/5.15.17/lib/QtCore.framework/Headers/qstring.h
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o main.o main.cpp
 
 mynotepad.o: mynotepad.cpp /opt/homebrew/Cellar/qt@5/5.15.17/lib/QtCore.framework/Headers/QFile \
@@ -873,6 +883,12 @@ mynotepad.o: mynotepad.cpp /opt/homebrew/Cellar/qt@5/5.15.17/lib/QtCore.framewor
 		/opt/homebrew/Cellar/qt@5/5.15.17/lib/QtCore.framework/Headers/qtextstream.h \
 		/opt/homebrew/Cellar/qt@5/5.15.17/lib/QtWidgets.framework/Headers/QMessageBox \
 		/opt/homebrew/Cellar/qt@5/5.15.17/lib/QtWidgets.framework/Headers/qmessagebox.h \
+		/opt/homebrew/Cellar/qt@5/5.15.17/lib/QtWidgets.framework/Headers/QInputDialog \
+		/opt/homebrew/Cellar/qt@5/5.15.17/lib/QtWidgets.framework/Headers/qinputdialog.h \
+		/opt/homebrew/Cellar/qt@5/5.15.17/lib/QtWidgets.framework/Headers/QLineEdit \
+		/opt/homebrew/Cellar/qt@5/5.15.17/lib/QtWidgets.framework/Headers/qlineedit.h \
+		/opt/homebrew/Cellar/qt@5/5.15.17/lib/QtCore.framework/Headers/QTemporaryFile \
+		/opt/homebrew/Cellar/qt@5/5.15.17/lib/QtCore.framework/Headers/qtemporaryfile.h \
 		/opt/homebrew/Cellar/qt@5/5.15.17/lib/QtPrintSupport.framework/Headers/QPrintDialog \
 		/opt/homebrew/Cellar/qt@5/5.15.17/lib/QtPrintSupport.framework/Headers/qprintdialog.h \
 		/opt/homebrew/Cellar/qt@5/5.15.17/lib/QtPrintSupport.framework/Headers/QPrinter \
@@ -884,8 +900,43 @@ mynotepad.o: mynotepad.cpp /opt/homebrew/Cellar/qt@5/5.15.17/lib/QtCore.framewor
 		mynotepad.h \
 		/opt/homebrew/Cellar/qt@5/5.15.17/lib/QtWidgets.framework/Headers/QMainWindow \
 		/opt/homebrew/Cellar/qt@5/5.15.17/lib/QtWidgets.framework/Headers/qmainwindow.h \
-		ui_mynotepad.h
+		ui_mynotepad.h \
+		../FILE_MANAGER/include/encryption.h
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o mynotepad.o mynotepad.cpp
+
+encryption.o: ../FILE_MANAGER/src/encryption.c /opt/homebrew/opt/openssl@3/include/openssl/aes.h \
+		/opt/homebrew/opt/openssl@3/include/openssl/macros.h \
+		/opt/homebrew/opt/openssl@3/include/openssl/opensslconf.h \
+		/opt/homebrew/opt/openssl@3/include/openssl/configuration.h \
+		/opt/homebrew/opt/openssl@3/include/openssl/opensslv.h \
+		/opt/homebrew/opt/openssl@3/include/openssl/evp.h \
+		/opt/homebrew/opt/openssl@3/include/openssl/types.h \
+		/opt/homebrew/opt/openssl@3/include/openssl/e_os2.h \
+		/opt/homebrew/opt/openssl@3/include/openssl/safestack.h \
+		/opt/homebrew/opt/openssl@3/include/openssl/stack.h \
+		/opt/homebrew/opt/openssl@3/include/openssl/core.h \
+		/opt/homebrew/opt/openssl@3/include/openssl/core_dispatch.h \
+		/opt/homebrew/opt/openssl@3/include/openssl/indicator.h \
+		/opt/homebrew/opt/openssl@3/include/openssl/params.h \
+		/opt/homebrew/opt/openssl@3/include/openssl/bn.h \
+		/opt/homebrew/opt/openssl@3/include/openssl/crypto.h \
+		/opt/homebrew/opt/openssl@3/include/openssl/cryptoerr.h \
+		/opt/homebrew/opt/openssl@3/include/openssl/symhacks.h \
+		/opt/homebrew/opt/openssl@3/include/openssl/cryptoerr_legacy.h \
+		/opt/homebrew/opt/openssl@3/include/openssl/ebcdic.h \
+		/opt/homebrew/opt/openssl@3/include/openssl/bnerr.h \
+		/opt/homebrew/opt/openssl@3/include/openssl/bio.h \
+		/opt/homebrew/opt/openssl@3/include/openssl/bioerr.h \
+		/opt/homebrew/opt/openssl@3/include/openssl/evperr.h \
+		/opt/homebrew/opt/openssl@3/include/openssl/objects.h \
+		/opt/homebrew/opt/openssl@3/include/openssl/obj_mac.h \
+		/opt/homebrew/opt/openssl@3/include/openssl/asn1.h \
+		/opt/homebrew/opt/openssl@3/include/openssl/asn1err.h \
+		/opt/homebrew/opt/openssl@3/include/openssl/objectserr.h \
+		/opt/homebrew/opt/openssl@3/include/openssl/sha.h \
+		/opt/homebrew/opt/openssl@3/include/openssl/rand.h \
+		/opt/homebrew/opt/openssl@3/include/openssl/randerr.h
+	$(CC) -c $(CFLAGS) $(INCPATH) -o encryption.o ../FILE_MANAGER/src/encryption.c
 
 qrc_mynotepad.o: qrc_mynotepad.cpp 
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o qrc_mynotepad.o qrc_mynotepad.cpp

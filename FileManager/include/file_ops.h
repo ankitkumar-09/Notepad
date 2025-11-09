@@ -27,5 +27,6 @@ void change_directory(const char* dirname);
 void show_current_directory(void);
 long get_file_size(const char* filename);
 int file_exists(const char* filename);
+void open_in_gui_editor(const char* filename);
 
 #endif

@@ -1,6 +1,8 @@
 #include "../include/menu.h"
 #include "../include/file_ops.h"
 #include "editor.h"
+#include "../include/encryption.h"
+
 void clear_input_buffer(void) {
     int c;
     while ((c = getchar()) != '\n' && c != EOF);
@@ -35,6 +37,8 @@ void show_main_menu(void) {
     printf("║  4. List Files in Current Directory  ║\n");
     printf("║  5. Search Files                     ║\n");
     printf("║  6. Edit File                        ║\n");
+    printf("║  7. Open file in GUI Notepad         ║\n");
+    printf("║  8. Encrypt / Decrypt File           ║\n"); 
     printf("║  0. Exit                             ║\n");
     printf("╚══════════════════════════════════════╝\n");
     printf("Enter your choice (0-5): ");
@@ -295,12 +299,49 @@ void handle_main_menu(void) {
                 edit_file_ui(filename);
                 pause_screen();
                 break;
-                
+                case 7: {
+                  char filename[256];
+                  printf("Enter the file name to open in GUI: ");
+                  scanf("%s", filename);
+                  open_in_gui_editor(filename);
+                  break;
+}
+case 8: {
+    char src[256], dest[256], password[256];
+    int choice;
+
+    printf("1. Encrypt File\n");
+    printf("2. Decrypt File\n");
+    printf("Enter choice: ");
+    scanf("%d", &choice);
+    clear_input_buffer();
+
+    printf("Enter source filename: ");
+    get_user_input(src, sizeof(src));
+
+    printf("Enter destination filename: ");
+    get_user_input(dest, sizeof(dest));
+
+    printf("Enter password: ");
+    get_user_input(password, sizeof(password));
+
+    if (choice == 1)
+        aes_encrypt_file(src, dest, password);
+    else if (choice == 2)
+        aes_decrypt_file(src, dest, password);
+    else
+        printf("Invalid option.\n");
+
+    pause_screen();
+    break;
+}
+
+
             case 0: // Exit
                 printf("Thank you for using File Management System!\n");
                 printf("Goodbye!\n");
                 return;
-                
+            
             default:
                 printf("Invalid choice! Please try again.\n");
                 pause_screen();

@@ -1,7 +1,6 @@
-
 CC        = gcc
 CFLAGS    = -Wall -Wextra -std=c99 -g
-LDFLAGS   = -lcurses
+LDFLAGS   = -lcurses -L/opt/homebrew/opt/openssl@3/lib -lcrypto
 
 # Directories
 SRC_DIR    = src
@@ -17,7 +16,7 @@ DEPS    = $(OBJECTS:.o=.d)
 
 TARGET = $(BIN_DIR)/file_manager
 
-INC_FLAGS = -I$(INCLUDE_DIR)
+INC_FLAGS = -I$(INCLUDE_DIR) -I/opt/homebrew/opt/openssl@3/include
 CPPFLAGS  = $(INC_FLAGS) -MMD -MP
 
 .PHONY: all clean install uninstall run debug release test-files clean-test structure help
@@ -37,34 +36,28 @@ clean:
 	@echo "Cleaning build files..."
 	rm -rf $(BUILD_DIR) $(BIN_DIR)
 
-# Install to /usr/local/bin
 install: $(TARGET)
 	@echo "Installing to /usr/local/bin..."
 	sudo cp $(TARGET) /usr/local/bin/file_manager
 	@echo "Installation complete! Run with: file_manager"
 
-# Uninstall from /usr/local/bin
 uninstall:
 	@echo "Removing from /usr/local/bin..."
 	sudo rm -f /usr/local/bin/file_manager
 	@echo "Uninstall complete!"
 
-# Build and run
 run: $(TARGET)
 	@echo "Starting File Manager..."
 	./$(TARGET)
 
-# Debug build
 debug: CFLAGS += -DDEBUG -g3 -O0
 debug: $(TARGET)
 	@echo "Debug build complete!"
 
-# Release build
 release: CFLAGS += -O2 -DNDEBUG
 release: clean $(TARGET)
 	@echo "Release build complete!"
 
-# Create sample test files
 test-files:
 	@echo "Creating test files..."
 	mkdir -p test_directory
@@ -73,19 +66,16 @@ test-files:
 	echo "Sample content for testing." > sample.txt
 	@echo "Test files created!"
 
-# Remove test files
 clean-test:
 	@echo "Removing test files..."
 	rm -f test.txt hello.txt sample.txt
 	rm -rf test_directory
 	@echo "Test files removed!"
 
-# Show project structure
 structure:
 	@echo "Project Structure:"
 	@find . -type f \( -name "*.c" -o -name "*.h" -o -name "Makefile" \) | sort
 
-# Help
 help:
 	@echo "Available targets:"
 	@echo "  all         - Build the project (default)"

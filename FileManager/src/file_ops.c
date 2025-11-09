@@ -342,3 +342,16 @@ void show_current_directory(void) {
         printf("Error: Could not get current directory\n");
     }
 }
+
+
+// Launch the GUI editor for a file
+void open_in_gui_editor(const char* filename) {
+    char command[512];
+
+    snprintf(command, sizeof(command),
+             "../MyNotepad/mynotepad.app/Contents/MacOS/mynotepad \"%s\" &", filename);
+
+    printf("Opening '%s' in GUI editor...\n", filename);
+    system(command);
+}
+
